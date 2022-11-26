@@ -1,28 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Webshop.Data;
+﻿
+// using Data.Models;
 
-namespace Tracker_App_Api.Data
-{
-    public class DatabaseContextFactory
-    {
-        public DatabaseContext CreateDbContext(string[] args)
-        {
-            var connstr = new ConfigProperties().GetConnectionString();
+// namespace Data
+// {
+//     public class DatabaseContextFactory
+//     {
+//         public AppDbContext CreateDbContext(string[] args)
+//         {
+//             var props = new ConfigProperties();
+//             var connstr = props.ConnectionString;
 
-            if (string.IsNullOrWhiteSpace(connstr))
-            {
-                throw new InvalidOperationException(
-                    "Could not find a connection string named 'Default'.");
-            }
+//             if (string.IsNullOrWhiteSpace(connstr))
+//             {
+//                 throw new InvalidOperationException(
+//                     "Could not find a connection string named 'Default'.");
+//             }
 
-            var optionsBuilder =
-                 new DbContextOptionsBuilder<DatabaseContext>();
+//             var optionsBuilder =
+//                  new DbContextOptionsBuilder<AppDbContext>();
 
-            optionsBuilder.UseSqlServer(connstr);
+//             optionsBuilder.UseSqlServer(connstr);
 
-            var options = optionsBuilder.Options;
+//             var options = optionsBuilder.Options;
 
-            return new DatabaseContext(options, null);
-        }
-    }
-}
+//             return new AppDbContext();
+//         }
+//     }
+// }

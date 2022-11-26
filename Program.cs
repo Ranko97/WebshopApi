@@ -1,14 +1,41 @@
+using System.Text.Json.Serialization;
+using Data.Models;
 using GraphQL;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+builder.Services.AddEntityFrameworkNpgsql().AddDbContext<AppDbContext>(opt =>
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 // Add graphql
 builder.Services.AddGraphQL(b => b
     .AddAutoSchema<Query>()  // schema
     .AddSystemTextJson());   // serializer
+
+// add services to DI container
+{
+    var services = builder.Services;
+    var env = builder.Environment;
+
+    services.AddDbContext<AppDbContext>();
+    services.AddCors();
+    services.AddControllers().AddJsonOptions(x =>
+    {
+        // serialize enums as strings in api responses (e.g. Role)
+        x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+
+        // ignore omitted parameters on models to enable optional params (e.g. User update)
+        x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    });
+    // services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+    // configure DI for application services
+    // services.AddScoped<IUserService, UserService>();
+}
 
 var app = builder.Build();
 
@@ -40,4 +67,8 @@ app.UseAuthorization();
 
 // app.MapRazorPages();
 
-app.Run();
+// // Seed database
+// var appDbContext = app.Services.GetRequiredService<AppDbContext>();
+// new DbSeedInitializer().Seed(appDbContext);
+
+app.Run("http://localhost:5000");
