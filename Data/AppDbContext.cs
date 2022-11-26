@@ -12,18 +12,9 @@ public class AppDbContext : DbContext
         Configuration = configuration;
     }
 
-    // protected override void OnConfiguring(DbContextOptionsBuilder options)
-    // {
-    //     // connect to postgres with connection string from app settings
-    // }
-
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        // connect to postgres with connection string from app settings
-
-        // options.UseNpgsql(Configuration.GetConnectionString("WebApiDatabase"));
-
-        options.UseNpgsql("User ID =postgres;Password=ne dam;Server=localhost;Port=5432;Database=webshop; Integrated Security=true;Pooling=true;");
+        options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
     }
 
     public DbSet<Category>? Categories { get; set; }
