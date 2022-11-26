@@ -5,12 +5,12 @@ namespace Data
 {
     public class DbSeedInitializer
     {
-        public void Seed(AppDbContext context)
+        public void Initialize(AppDbContext context)
         {
             var endusers = new List<Enduser>
             {
-                new Enduser{FirstName = "Marko", LastName = "Markovic"},
-                new Enduser{FirstName = "Petar", LastName = "Petrovic"},
+                new Enduser{Id = new Guid("90e93b46-8516-4149-963f-6571ca6fdd2f") ,FirstName = "Marko", LastName = "Markovic", IsActive = true},
+                new Enduser{Id = new Guid("f76f75e0-47b7-4813-9856-20c2d1bebaa7") ,FirstName = "Petar", LastName = "Petrovic", IsActive = true},
             };
 
             endusers.ForEach(s => context.Endusers.Add(s));

@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Data;
 using Data.Models;
 using GraphQL;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,8 @@ builder.Services.AddGraphQL(b => b
         // ignore omitted parameters on models to enable optional params (e.g. User update)
         x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     });
+    builder.Services.AddScoped<DbSeedInitializer>();
+
     // services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
     // configure DI for application services
@@ -38,6 +41,8 @@ builder.Services.AddGraphQL(b => b
 }
 
 var app = builder.Build();
+
+SeedData(app);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -72,3 +77,31 @@ app.UseAuthorization();
 // new DbSeedInitializer().Seed(appDbContext);
 
 app.Run("http://localhost:5000");
+
+
+void SeedData(WebApplication host)
+{
+    using var scope = host.Services.CreateScope();
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        var dbContext = services.GetRequiredService<AppDbContext>();
+
+        if (dbContext.Database.IsSqlServer())
+        {
+            dbContext.Database.Migrate();
+        }
+
+        // var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        // var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
+        // AppDbContextSeed.SeedData(userManager, roleManager);
+
+        new DbSeedInitializer().Initialize(dbContext);
+    }
+    catch (Exception)
+    {
+        //Log some error
+        throw;
+    }
+}
