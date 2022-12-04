@@ -1,3 +1,5 @@
+using Data.Interfaces;
+
 namespace Webshop.Helpers;
 
 public class ContextServiceLocator
@@ -9,4 +11,5 @@ public class ContextServiceLocator
         _httpContextAccessor = httpContextAccessor;
     }
 
+    public IEndUserRepository EndUserRepo => _httpContextAccessor.HttpContext.RequestServices.GetRequiredService<IEndUserRepository>();
 }

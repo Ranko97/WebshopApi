@@ -1,6 +1,8 @@
 using System.Text.Json.Serialization;
 using Data;
+using Data.Interfaces;
 using Data.Models;
+using Data.Repositories;
 using GraphQL;
 using GraphQL.MicrosoftDI;
 using GraphQL.Types;
@@ -40,6 +42,8 @@ builder.Services.AddGraphQL(b => b
 
     services.AddHttpContextAccessor();
     services.AddSingleton<ContextServiceLocator>();
+    
+    services.AddScoped<IEndUserRepository, EndUserRepository>();
 
     // services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
