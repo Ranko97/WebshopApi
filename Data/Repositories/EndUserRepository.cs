@@ -1,5 +1,6 @@
 using Data.Interfaces;
 using Data.Models;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace Data.Repositories;
@@ -17,24 +18,7 @@ public class EndUserRepository : BaseRepository, IEndUserRepository
 
     public async Task<List<Enduser>> All()
     {
-        return await Task.FromResult(
-            new[] {
-                new Enduser {
-                    Id = new Guid("90e93b46-8516-4149-963f-6571ca6fdd2f"),
-                    FirstName = "Marko",
-                    LastName = "Markovic",
-                    UserName = "marko",
-                    IsActive = true,
-                },
-                new Enduser {
-                    Id = new Guid("f76f75e0-47b7-4813-9856-20c2d1bebaa7"),
-                    FirstName = "Petar",
-                    LastName = "Petrovic",
-                    UserName = "petar",
-                    IsActive = true,
-                },
-            }.ToList()
-        );
+        return await db.Endusers.OrderByDescending(x => x.Created).ToListAsync();
     }
 
     public Task<Enduser> Login(string username, string password)

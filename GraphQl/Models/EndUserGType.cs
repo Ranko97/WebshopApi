@@ -15,6 +15,8 @@ public class EndUserGType : ObjectGraphType<Enduser>
 
         Field(x => x.Id, nullable: false, type: typeof(NonNullGraphType<IdGraphType>));
         Field(x => x.UserName, nullable: false, type: typeof(NonNullGraphType<StringGraphType>));
-        Field(x => x.Email, nullable: false, type: typeof(StringGraphType));
+        Field(x => x.FirstName, nullable: false, type: typeof(NonNullGraphType<StringGraphType>));
+        Field(x => x.LastName, nullable: false, type: typeof(NonNullGraphType<StringGraphType>));
+        Field(x => x.Email, nullable: false, type: typeof(NonNullGraphType<StringGraphType>));
     }
 }

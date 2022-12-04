@@ -9,8 +9,8 @@ namespace Data
         {
             var endusers = new List<Enduser>
             {
-                new Enduser{Id = new Guid("90e93b46-8516-4149-963f-6571ca6fdd2f") ,FirstName = "Marko", LastName = "Markovic", IsActive = true},
-                new Enduser{Id = new Guid("f76f75e0-47b7-4813-9856-20c2d1bebaa7") ,FirstName = "Petar", LastName = "Petrovic", IsActive = true},
+                new Enduser{Id = new Guid("90e93b46-8516-4149-963f-6571ca6fdd2f") ,FirstName = "Marko", LastName = "Markovic", UserName = "marko", Email = "marko@mail.com", IsActive = true},
+                new Enduser{Id = new Guid("f76f75e0-47b7-4813-9856-20c2d1bebaa7") ,FirstName = "Petar", LastName = "Petrovic", UserName = "petar", Email = "petar@mail.com", IsActive = true},
             };
 
             if (!context.Endusers.Any())
