@@ -2,19 +2,23 @@ using System.Text.Json.Serialization;
 using Data;
 using Data.Models;
 using GraphQL;
+using GraphQL.MicrosoftDI;
+using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
+using Webshop.GraphQl;
+using Webshop.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-builder.Services.AddRazorPages();
 
 builder.Services.AddEntityFrameworkNpgsql().AddDbContext<AppDbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add graphql
+
+builder.Services.AddSingleton<ISchema, AppSchema>(services => new AppSchema(new SelfActivatingServiceProvider(services)));
+
+// // Add graphql
 builder.Services.AddGraphQL(b => b
-    .AddAutoSchema<Query>()  // schema
+    .AddAutoSchema<Webshop.GraphQl.AppSchema>()
     .AddSystemTextJson());   // serializer
 
 // add services to DI container
@@ -33,6 +37,9 @@ builder.Services.AddGraphQL(b => b
         x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     });
     builder.Services.AddScoped<DbSeedInitializer>();
+
+    services.AddHttpContextAccessor();
+    services.AddSingleton<ContextServiceLocator>();
 
     // services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -54,7 +61,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseDeveloperExceptionPage();
 app.UseWebSockets();
-app.UseGraphQL("/graphql");            // url to host GraphQL endpoint
+app.UseGraphQL<ISchema>("/graphql");            // url to host GraphQL endpoint
 app.UseGraphQLPlayground(
     "/",                               // url to host Playground at
     new GraphQL.Server.Ui.Playground.PlaygroundOptions
