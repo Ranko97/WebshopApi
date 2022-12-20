@@ -18,7 +18,7 @@ builder.Services.AddEntityFrameworkNpgsql().AddDbContext<AppDbContext>(opt =>
 
 builder.Services.AddSingleton<ISchema, AppSchema>(services => new AppSchema(new SelfActivatingServiceProvider(services)));
 
-// // Add graphql
+// Add graphql
 builder.Services.AddGraphQL(b => b
     .AddAutoSchema<Webshop.GraphQl.AppSchema>()
     .AddSystemTextJson());   // serializer
