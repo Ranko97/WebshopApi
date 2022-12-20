@@ -2,17 +2,11 @@ using Models;
 
 namespace Data.Interfaces;
 
-public interface IEndUserRepository
+public interface IEndUserRepository : IBaseRepository<Enduser>
 {
-    Task<Enduser> Get(Guid id);
-
-    Task<List<Enduser>> All();
-
     Task<Enduser> Login(string username, string password);
 
     Task<Enduser> Register(Enduser enduser);
-
-    Task<Enduser> UpdateProfile(Enduser enduser);
 
     Task<Enduser> Verify(string verificationCode);
 
